@@ -110,6 +110,7 @@ if (isset($_POST["action"])) {
    <tr>
     <th>Fichero</th>
     <th>Nombre</th>
+    <th>Descargar</th>
     <th>Borrar</th>
    </tr>
   ';
@@ -123,6 +124,7 @@ if (isset($_POST["action"])) {
     <tr>
      <td><img src="' . $path . '" class="img-thumbnail" height="50" width="50" /></td>
      <td contenteditable="true" data-folder_name="' . $_POST["folder_name"] . '"  data-file_name = "' . $file . '" class="change_file_name">' . $file . '</td>
+     <td><button name="download_file" class="download_file btn btn-success btn-xs" id="' . $path . '" file_name= "' . $file . '">↓</button></td>
      <td><button name="remove_file" class="remove_file btn btn-danger btn-xs" id="' . $path . '">X</button></td>
     </tr>
     ';
@@ -136,6 +138,39 @@ if (isset($_POST["action"])) {
         if (file_exists($_POST["path"])) {
             unlink($_POST["path"]);
             echo 'Fichero borrado';
+        }
+    }
+    
+    if ($_POST["action"] == "download_file") {
+        if (file_exists($_POST["path"])) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/force-download');
+            header('Content-Disposition: attachment; filename="' . basename($_POST["path"]) . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($_POST["path"]));
+            
+            readfile($_POST["path"]);
+            flush();
+//            header("Cache-Control: public");
+//    header("Content-Description: File Transfer");
+//    header('Content-Disposition: attachment; filename="' . $_POST["path"] . '"');
+//    header("Content-Type: application/zip");
+//    header("Content-Transfer-Encoding: binary");
+//
+//    readfile($_POST["path"]);
+//            
+//            $handle = fopen($_POST["path"], 'rb');
+//            $buffer = '';
+//            while (!feof($handle)) {
+//                $buffer = fread($handle, 4096);
+//                echo $buffer;
+//                ob_flush();
+//                flush();
+//            }
+//            fclose($handle);
+//            exit;
         }
     }
 

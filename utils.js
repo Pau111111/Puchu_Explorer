@@ -132,7 +132,31 @@ $(document).ready(function(){
                 });
             }
         });
-
+        
+        $(document).on('click', '.download_file', function () {
+            var path = $(this).attr("id");
+            var file_name = $(this).attr("file_name");
+            //var file_name = $(".change_file_name").data("file_name");
+            console.log(path);
+            var action = "download_file";
+            $.ajax({
+                url: "action.php",
+                method: "POST",
+                data: {path: path, action: action},
+                success: function (data)
+                {
+                    alert(data);
+//                    $.fileDownload('path')
+//    .done(function () { alert('File download a success!'); })
+//    .fail(function () { alert('File download failed!'); });
+//            var link = document.createElement("a");
+//            link.download = file_name;
+//            link.href = path;
+//            link.click();
+                }
+            });
+        });
+        
         $(document).on('blur', '.change_file_name', function () {
             var folder_name = $(this).data("folder_name");
             var old_file_name = $(this).data("file_name");
